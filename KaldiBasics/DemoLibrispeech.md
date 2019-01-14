@@ -1,11 +1,17 @@
 # Librispeech note 
 
 ### chain model
-chain model是在nnet3框架下，本质上是参数的调整。主要特性：
+####chain model是在nnet3框架下，本质上是参数的调整。主要特性：
 1， 采样率是原来的1/3.
 2， 模型是目标函数是the log probability of the correct sequence.（对序列，本质是计算MMI，但是实际应用上规避了lattice生成的步骤 
 by doing a full forward-backward on a decoding graph derived from a phone n-gram language model.）
-3， Because of the reduced frame rate, we need to use unconventional HMM topologies (allowing the traversal of the HMM in one state).
-4， We use fixed transition probabilities in the HMM, and don't train them (we may decide train them in future; but for the most part the neural-net output probabilities can do the same job as the transition probabilities, depending on the topology).
-5， Currently, only nnet3 DNNs are supported (see The "nnet3" setup), and online decoding has not yet been implemented (we're aiming for April to June 2016).
-6， Currently the results are a bit better then those of conventional DNN-HMMs (about 5% relative better), but the system is about 3 times faster to decode; training time is probably a bit faster too, but we haven't compared it exactly.
+3，因为采样率降低, 需要改变 HMM topologies， (允许HMM一个state就通过).
+4，目前使用固定的转移概率，没有对转移矩阵作训练，目前NN输出概率作用和转移概率一样 
+5，目前只支持nnet3
+6，三倍速解码，且性能有5%的相对提升，训练时间也缩短 
+
+####nnet3框架的功能：
+
+nnet3既支持简单的前向传播DNN，而且支持时延神经网络tdnn，以及递归的拓扑结构（RNN， LSTM ，BLSTM等），因此nnet3的数据结构“知道”时间轴。
+
+
