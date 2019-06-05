@@ -5,6 +5,17 @@
 
 *  transition-state：a one-based index that encodes the pdf-id (i.e. the clustered context-dependent HMM state), the phone identity, and information about whether we took the self-loop or forward transition in the HMM. 与 dnn模型文件里的triples的行号对应，表示一个state上的转移概率的条转移概率的集合。一个transition-id表示其中一条转移概率弧。
 
+* 贝叶斯公式在dnn解码时的对应关系：
+
+`P(B|A)=P(A|B)P(B)/P(A) `
+
+  P（state_id | acoustic_feature ）= P(B | A) = 后验概率 = dnn输出概率 
+
+  套用GMM-HMM模型时，得到DNN的后验概率后需要除以先验概率得到似然，这样继续gmm HMM模型的计算。
+
+  kaldi 模型中 最后一行存储的是先验概率（即公式里的P（B）），即在使用决策树聚类状态时统计的各状态出现的概率。
+
+
 
 ## 1, tree
 
@@ -143,6 +154,12 @@ prior dimension: 5704, prior sum: 1, prior min: 1.49816e-06`
 The **NormalizeComponent** is something we add to stabilize the training of p-norm networks. It is also a fixed, non-trainable nonlinearity
 
 **FixedScaleComponent** applies a fixed per-element scale.
+
+**prior** prior probability in range [0,1)
+
+`</Components> </Nnet>  [ 0.208245 1.09233e-09 0.0002648371 0.0005858553 ... ]`
+
+先验概率是mdl文件的最后一行，（并没有标记tag），维数与模型的输出节点对应，总和为1。
 
 
 供参考的文件：
