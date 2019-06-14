@@ -221,3 +221,36 @@ FA的结果每帧对应一个transition-id，
 第一部分是每帧一个transition-id作为输出，同一个音素用方括号括起来，transition-id 的个数对应时长。
 第二部分是每个方括号内的部分对应的音素。
 以上音频4.48s长，共有446个transition-id输出。
+
+
+## tree clustering
+In gmm training part, tree are generated start from mono phone.
+
+basci steps
+
+```bash
+# accumulating tree stats from alignment
+acc-tree-stats [options] <model-in> <features-rspecifier> <alignments-rspecifier> <tree-accs-out>. # output data .treeacc
+sum-tree-stats [options] tree-accs-out tree-accs-in1 tree-accs-in2 ...  
+
+# getting questions for tree-building
+cluster-phones [options] <tree-stats-in> <phone-sets-in> <clustered-phones-out>. #  phone-sets-in are info of tied up phones
+
+```
+
+* Here phone-sets-in are the tied phones , are stored in $lang/phones/sets.int, for example:
+```
+SIL SIL_B SIL_E SIL_I SIL_S
+SPN SPN_B SPN_E SPN_I SPN_S
+AA_B AA_E AA_I AA_S AA0_B AA0_E AA0_I AA0_S AA1_B AA1_E AA1_I AA1_S AA2_B AA2_E AA2_I AA2_S
+AE_B AE_E AE_I AE_S AE0_B AE0_E AE0_I AE0_S AE1_B AE1_E AE1_I AE1_S AE2_B AE2_E AE2_I AE2_S
+```
+TODO: figure out the meaning of  <clustered-phones-out> in exp/XXX/question.int
+
+
+```bash
+cat $lang/phones/extra_questions.int >> $dir/question.int  # extra_questions are TODO
+compile-questions --binary=false [options] <topo> <questions-text-file> <questions-out>.txt # output the question in txt format, it looks very familier with the tree exp/tri6b/questions.qst.txt
+
+build-tree [options] <tree-stats-in> <roots-file> <questions-file> <topo-file> <tree-out>
+```
