@@ -254,3 +254,17 @@ compile-questions --binary=false [options] <topo> <questions-text-file> <questio
 
 build-tree [options] <tree-stats-in> <roots-file> <questions-file> <topo-file> <tree-out>
 ```
+
+### ctm file 
+Obtain CTM output from alignment files
+
+```bash
+ali-to-phones --ctm-output final.mdl \
+ark:"gunzip -c $ali.gz|" -> $ali.ctm
+
+# utt_id channel_num start_time phone_dur phone_id
+000013cad0a812bbc3b43e6dd61200e1704f4775f09e1eb5ab631197d54b0337 1 0.000 0.060 1
+000013cad0a812bbc3b43e6dd61200e1704f4775f09e1eb5ab631197d54b0337 1 0.060 0.080 171
+000013cad0a812bbc3b43e6dd61200e1704f4775f09e1eb5ab631197d54b0337 1 0.140 0.060 144
+000013cad0a812bbc3b43e6dd61200e1704f4775f09e1eb5ab631197d54b0337 1 0.200 0.050 187
+```
